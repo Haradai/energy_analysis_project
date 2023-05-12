@@ -2,4 +2,4 @@ archive
 energty_project/.DS_Store
 .gitignore
 energty_project
-data/bert_embedded.pkl
+data
