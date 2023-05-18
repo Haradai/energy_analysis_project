@@ -10,4 +10,4 @@ parameters:
   optimizer:
     parameters:
       type:
-        values: [sgd, adam, adamax]
+        values: [adam]
