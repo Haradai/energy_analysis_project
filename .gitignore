@@ -5,3 +5,5 @@ data
 wandb/run-20230514_203342-ezztvc3u/files/wandb-metadata.json
 wandb
 __pycache__/dataset.cpython-39.pyc
+sweep_mobilenetv3.yaml
+.gitignore
