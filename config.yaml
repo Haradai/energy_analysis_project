@@ -3,29 +3,11 @@ metric:
   name: epoch_loss
   goal: minimize
 parameters:
-  model:
-    parameters:
-      hidden_size:
-        values: [128, 256, 512]
-      num_layers:
-        values: [1, 2, 3]
-  num_epochs:
-    value: 100
+  hidden_size:
+    values: [100,200]
+  num_layers:
+    values: [10, 16]
   optimizer:
     parameters:
       type:
-        values: [adam, sgd]
-      params:
-        parameters:
-          learning_rate:
-            distribution: uniform
-            min: 0.00001
-            max: 0.01
-  batch_size:
-    value: 64
-  early_stopping:
-    parameters:
-      use:
-        value: True
-      patience:
-        value: 10
+        values: [sgd, adam, adamax]
