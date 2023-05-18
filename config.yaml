@@ -1,13 +1,17 @@
 method: bayes
 metric:
-  name: epoch_loss
+  name: Validation_Epoch_Loss
   goal: minimize
 parameters:
   hidden_size:
-    values: [100,200]
+    values: [128, 256, 512]
   num_layers:
-    values: [10, 16]
+    values: [10, 16, 32, 128]
   optimizer:
     parameters:
       type:
         values: [adam]
+      lr:
+        distribution: uniform
+        min: 0.0001
+        max: 0.1
