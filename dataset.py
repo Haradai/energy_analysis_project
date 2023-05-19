@@ -1,4 +1,4 @@
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 from sklearn.decomposition import PCA
 from sklearn import preprocessing 
 import torch
@@ -6,7 +6,6 @@ import numpy as np
 import pandas as pd
 import pickle
 import datetime
-
 class energyProject_dataset(Dataset):
     def __init__(self,dataset_pth,occupacio_pth,bert_embeddings_pkl_pth,pca_pkl_pth=None):
         self.df = pd.read_csv(dataset_pth)
@@ -41,7 +40,9 @@ class energyProject_dataset(Dataset):
         columns_to_process = ['winddirDegree', 'precipMM', 'visibility', 'WindChillC',
        'humidity', 'pressure','windspeedMiles', 'uvIndex', 'DewPointC',
        'FeelsLikeC', 'tempC','weatherCode','HeatIndexC', 'WindGustKmph', 'cloudcover',
-       'windspeedKmph']
+       'windspeedKmph','Q-Enginyeria (Cos Central) [kWh] [Q-Enginyeria]',
+       'Q-Enginyeria (Química) [kWh] [Q-Enginyeria]',
+       'Q-Enginyeria (Espina 4) [kWh] [Q-Enginyeria]'] #normalze also target
      
         for col in columns_to_process:
             scaler, values = self.normalize_values(self.df[col])
@@ -83,8 +84,6 @@ class energyProject_dataset(Dataset):
         
         ##free memory by removing unnecessary variables.
         del self.all_one_hots
-        
-            
 
     def normalize_values(self,x):
         """
