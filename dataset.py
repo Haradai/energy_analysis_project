@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import pickle
 import datetime
+
 class energyProject_dataset(Dataset):
     def __init__(self,dataset_pth,occupacio_pth,bert_embeddings_pkl_pth,pca_pkl_pth=None):
         self.df = pd.read_csv(dataset_pth)
@@ -315,5 +316,13 @@ class energyProject_dataset(Dataset):
             return torch.tensor(emb_acti), torch.cat((enc_dt_tens,weather_tens),axis=0) , target_tens
 
         if self.activitivity_encoding_mode == 4:
-            assert "NOT IMPLEMENTED YET"
-            pass
+            acti = list(activities["Activitat"])
+            esp = list(activities["Espai"])
+
+            if len(acti) < self.max_ocu_lenght: #padd with occupation 0 vector so all samples are same shape
+                pad = ["NONE"] * (self.max_ocu_lenght-len(acti))
+                acti += pad
+                esp += pad
+
+            sample = {"activ:":acti, "espai": esp,"general_data":torch.cat((enc_dt_tens,weather_tens),axis=0),'y': target_tens}
+            return sample
