@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch.nn.init as init
 import torch
+from icecream import ic
 
 BERT_DIM_EMB = 768
 TIME_CLIMATE_DIM = 21
@@ -121,3 +122,40 @@ class attentiveLSTM_model(nn.Module):
                 init.xavier_uniform_(module.weight)
                 if module.bias is not None:
                     init.constant_(module.bias, 0)
+
+
+class SpaceActOptim_model(nn.Module):
+    def __init__(self, espai_emb_dim,hidden_dim,lstm_nl,nheads,attnFCdim):
+        super(attentiveLSTM_model, self).__init__()
+        self.hidden_dim = hidden_dim
+        self.lstm_nl = lstm_nl
+        self.nheads = nheads
+
+        self.selfattnKLYMA =  AttentionBlock(key_dim=TIME_CLIMATE_DIM, val_dim=TIME_CLIMATE_DIM, query_dim=TIME_CLIMATE_DIM, hidden_dim=hidden_dim, num_heads=nheads,attnFCdim=attnFCdim)
+        self.selfattnACTV =  AttentionBlock(key_dim=BERT_DIM_EMB, val_dim=BERT_DIM_EMB, query_dim=BERT_DIM_EMB, hidden_dim=hidden_dim, num_heads=nheads,attnFCdim=attnFCdim)
+        self.selfattnOUT =  AttentionBlock(key_dim=hidden_dim, val_dim=hidden_dim, query_dim=hidden_dim, hidden_dim=espai_emb_dim, num_heads=nheads,attnFCdim=attnFCdim)
+        
+        self.softmax = nn.Softmax()
+    def forward(self,ocu_ber_emb,espai_enc,general_data,h,c):
+
+        #first extend the general data so we have a pair for each class vector
+        klym_repr = general_data.unsqueeze(1).repeat(1, 34, 1)
+        klym_repr = self.selfattnKLYMA(klym_repr,klym_repr,klym_repr)
+        actv_repr = self.selfattnACTV(ocu_ber_emb,ocu_ber_emb,ocu_ber_emb)
+
+        #we are goyng to gate the actv representatyon wyth the klym reprs, so we have to sofmax yt.
+        klym_repr = self.softmax(klym_repr, axis=-1)
+        hidden = actv_repr*klym_repr
+
+        out = self.selfattnOUT(hidden, hidden, hidden)
+        # out = self.softmax(out)
+        ic(out.shape)
+        return out
+
+    def init_weights(self):
+        for module in self.modules():
+            if isinstance(module, nn.Linear):
+                init.xavier_uniform_(module.weight)
+                if module.bias is not None:
+                    init.constant_(module.bias, 0)
+
