@@ -76,7 +76,7 @@ class attentiveLSTM_model(nn.Module):
             nn.Softmax(dim=-1),
         )
         
-        self.lstm = nn.LSTM(input_size=hidden_dim, hidden_size=hidden_dim, num_layers=self.lstm_nl, dropout=0, batch_first=True) #input -> BATCH, SEQ_LENGHT, EMBEDDING_DIM
+        self.lstm = nn.LSTM(input_size=hidden_dim, hidden_size=hidden_dim, num_layers=self.lstm_nl, dropout=0.2, batch_first=True) #input -> BATCH, SEQ_LENGHT, EMBEDDING_DIM
         
         self.regressFC = nn.Linear(in_features=hidden_dim,out_features=1)
 
