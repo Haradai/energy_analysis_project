@@ -1,0 +1,23 @@
+method: bayes
+metric:
+  name: Validation_Epoch_Loss
+  goal: minimize
+parameters:
+  espai_emb_dim: 
+    values: [20, 50, 100]
+  hidden_size:
+    values: [24, 48, 96, 384]
+  num_layers:
+    values: [1, 3, 5, 10, 16, 32, 128]
+  attnFCdim:
+    values: [30,80]
+  heads:
+    values: [1,2,12,24]
+  optimizer:
+    parameters:
+      type:
+        values: [adam]
+      lr:
+        distribution: uniform
+        min: 0.00005
+        max: 0.1
