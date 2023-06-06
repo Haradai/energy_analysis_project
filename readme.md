@@ -32,7 +32,6 @@ The repository is organized as follows:
 - `data/`: Contains historical energy consumption data used for training and testing the predictive model.
 - `models/`: Includes the code and trained models for the predictive model.
 - `analysis/`: Contains scripts and notebooks for analyzing the results and generating insights.
-- `strategy/`: Contains the proposed optimal strategy based on the insights obtained from the analysis.
 - `docs/`: Contains additional documentation, such as project requirements and project plan.
 
 ## Contributors
